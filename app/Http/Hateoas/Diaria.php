@@ -2,6 +2,8 @@
 
 namespace App\Http\Hateoas;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 
 class Diaria extends HateoasBase implements HateoasInterface
@@ -18,6 +20,8 @@ class Diaria extends HateoasBase implements HateoasInterface
         $this->adicionaLink('GET', 'self', 'diarias.show', ['diaria' => $diaria->id]);
 
         $this->linkPagar($diaria);
+        $this->linkConfirmar($diaria);
+        $this->linkAvaliar($diaria);
 
         return $this->links;
     }
@@ -37,6 +41,43 @@ class Diaria extends HateoasBase implements HateoasInterface
                 'diarias.pagar',
                 ['diaria' => $diaria->id]
             );
+        }
+    }
+
+    /**
+     * Adiciona o link para confirmar a presença do(a) diarista
+     *
+     * @param Model $diaria
+     * @return void
+     */
+    private function linkConfirmar(Model $diaria): void
+    {
+        $depoisDataAtendimento = Carbon::now() > Carbon::parse($diaria->data_atendimento);
+        $diariaConfirmada = $diaria->status == 3;
+        $usuarioTipoCliente = Auth::user()->tipo_usuario == 1;
+
+        if($depoisDataAtendimento && $diariaConfirmada && $usuarioTipoCliente){
+            $this->adicionaLink('PATCH', 'confirmar_diarista', 'diarias.confirmar', [
+                'diaria' => $diaria->id
+            ]);
+        }
+    }
+
+    /**
+     * Defini o link para avaliar a diária
+     *
+     * @param Model $diaria
+     * @return void
+     */
+    private function linkAvaliar(Model $diaria): void
+    {
+        $usuarioNaoAvaliou = !$diaria->usuarioJaAvaliou(Auth::user()->id);
+        $diariaConcluida = $diaria->status == 4;
+
+        if($diariaConcluida && $usuarioNaoAvaliou) {
+            $this->adicionaLink('PATCH', 'avaliar_diaria', 'diarias.avaliar', [
+                'diaria' => $diaria->id
+            ]);
         }
     }
 }

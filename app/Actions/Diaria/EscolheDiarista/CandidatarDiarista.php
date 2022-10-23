@@ -8,12 +8,14 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use App\Checkers\Diaria\ValidaStatusDiaria;
+use App\Tasks\Diarista\SelecionaDiaristaIndice;
 use Illuminate\Validation\ValidationException;
 
 class CandidatarDiarista{
 
     public function __construct(
-        private ValidaStatusDiaria $validaStatusDiaria
+        private ValidaStatusDiaria $validaStatusDiaria,
+        private SelecionaDiaristaIndice $selecionaDiarista
     )
     {}
 
@@ -22,24 +24,44 @@ class CandidatarDiarista{
      * E define diretamente o(a) diarista para a diária caso criação maior que 24 horas
      *
      * @param Diaria $diaria
-     * @return bool | Model
+     * @return boolean|Model
      */
-    public function executar(Diaria $diaria): bool | Model
+    public function executar(Diaria $diaria): bool|Model
     {
         Gate::authorize('tipo-diarista');
 
         $this->validaStatusDiaria->executar($diaria, 2);
+        $this->verificaEnderecoDiarista();
 
         $diaristaId = Auth::user()->id;
 
         if($this->criadaAMenosDe24Horas($diaria)){
             $this->verificaDuplicidadeDeCandidato($diaria);
 
-            return $diaria->defineCandidato($diaristaId);
+            $diaria->defineCandidato($diaristaId);
+
+            return $this->selecionarDiaristaInstantaneamente($diaria);
 
         }
 
         return $diaria->confirmar($diaristaId);
+    }
+
+    /**
+     * Verifica se o diarista tem endereço cadastrado
+     *
+     * @return void
+     */
+    private function verificaEnderecoDiarista(): void
+    {
+        $quantidadeEndereco = Auth::user()->enderecoDiarista()->count();
+
+        if($quantidadeEndereco === 0){
+            throw ValidationException::withMessages([
+                'endereco_diarista' => 'O diarista deve ter o endereço cadastrado'
+            ]);
+
+        }
     }
 
     /**
@@ -72,5 +94,24 @@ class CandidatarDiarista{
         $quantidadeDehorasDesdeACriacao = $dataCriacaoDiaria->diffInHours(Carbon::now(), false);
         return $quantidadeDehorasDesdeACriacao < 24;
 
+    }
+
+    /**
+     * Seleciona diarista automaticamente quando for o terceiro candidato
+     *
+     * @param Diaria $diaria
+     * @return boolean|null
+     */
+    public function selecionarDiaristaInstantaneamente(Diaria $diaria): bool
+    {
+        $quantidadeCandidatas = $diaria->candidatas()->count();
+
+        if($quantidadeCandidatas === 3){
+            return $diaria->confirmar(
+                $this->selecionaDiarista->executar($diaria)
+            );
+        }
+
+        return false;
     }
 }

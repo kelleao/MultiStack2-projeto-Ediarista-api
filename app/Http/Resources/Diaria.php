@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use App\Http\Hateoas\Diaria as HateoasDiaria;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class Diaria extends JsonResource
 {
@@ -18,12 +19,12 @@ class Diaria extends JsonResource
     {
         return [
             "id" => $this->id,
-            "status" => $this->status,
+            "status" => $this->resource->usuarioJaAvaliou(Auth::user()->id) ? 6 : $this->status,
 
             "valor_comissao" => $this->valor_comissao,
             "nome_servico" => $this->servico->nome,
 
-            "cliente" => new UsuarioSimplificado( $this->cliente),
+            "cliente" => new UsuarioSimplificado($this->cliente),
 
             "data_atendimento" => Carbon::parse($this->data_atendimento)->toIso8601ZuluString(),
             "tempo_atendimento" => $this->tempo_atendimento,
@@ -52,7 +53,7 @@ class Diaria extends JsonResource
             "updated_at" => $this->updated_at,
 
             "servico" => $this->servico_id,
-            "diarista" => $this->diarista_id,
+            "diarista" => new UsuarioSimplificado($this->diarista),
 
             "links" => (new HateoasDiaria)->links($this->resource)
 

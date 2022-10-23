@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -38,6 +40,16 @@ class Diaria extends Model
     }
 
     /**
+     * Define a relação com diarista
+     *
+     * @return BelongsTo
+     */
+    public function diarista(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'diarista_id');
+    }
+
+    /**
      * Define a relação com os candidatos a realizar a diária
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -45,6 +57,16 @@ class Diaria extends Model
     public function candidatas()
     {
         return $this->hasMany(CandidataDiaria::class);
+    }
+
+    /**
+     * Define a relação com as avaliações do cliente e diarista
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function avaliacoes(): HasMany
+    {
+        return $this->hasMany(Avaliacao::class);
     }
 
     /**
@@ -117,4 +139,30 @@ class Diaria extends Model
             })
             ->get();
     }
+
+    /**
+     * Retorna a lista de oportunidade para o diarista
+     *
+     * @return Collection
+     */
+    static public function pagasComMaisDe24Horas(): Collection
+    {
+        return self::where('status', 2)
+            ->where('created_at', '<', Carbon::now()->subHours(24))
+            ->with('candidatas', 'candidatas.candidata.enderecoDiarista')
+            ->withCount('candidatas')
+            ->get();
+    }
+
+    /**
+     * Verifica se o usuário já avaliou a diária
+     *
+     * @param integer $usuarioId
+     * @return boolean
+     */
+    public function usuarioJaAvaliou(int $usuarioId): bool
+    {
+        return !! $this->avaliacoes()->where('avaliador_id', $usuarioId)->first();
+    }
+
 }
