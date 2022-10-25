@@ -17,6 +17,7 @@ use App\Http\Controllers\Diarista\DefineCidadesAtendidas;
 use App\Http\Controllers\Diarista\VerificaDisponibilidade;
 use App\Http\Controllers\Diaria\CadastroController as DiariaCadastroController;
 
+
 Route::get('/', IndexController::class);
 
 Route::group(['middleware' => 'auth:api'], function(){
