@@ -7,7 +7,7 @@ class TransacaoResponse
     public function __construct(
         public int $transacaoId,
         public string $status,
-        //public int $valorEstornado = 0
+        public int $valorEstornado = 0
     ) {
     }
 }

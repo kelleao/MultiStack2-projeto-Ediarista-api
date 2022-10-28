@@ -72,6 +72,10 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 Essa chave é usada no back-end da aplicação para conseguir criar e acessar as transações a partir da API do Pagarme:
 ak_test_nE14ZiG433nQG0D3aR0XhpzCj4iPkR
 
+## Execute no seu terminal o seguinte comando:
+
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
 # Acesso a listagem de transações
 
 o link de acesso dela é: https://transacoes-pagarme-multistack.herokuapp.com/

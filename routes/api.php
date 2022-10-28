@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\Diaria\PagaDiaria;
 use App\Http\Controllers\Diaria\AvaliaDiaria;
+use App\Http\Controllers\Diaria\CancelaDiaria;
 use App\Http\Controllers\Diaria\Oportunidades;
 use App\Http\Controllers\Servico\ObtemServicos;
 use App\Http\Controllers\Diaria\ConfirmaPresenca;
@@ -16,7 +17,6 @@ use App\Http\Controllers\Usuario\AutenticacaoController;
 use App\Http\Controllers\Diarista\DefineCidadesAtendidas;
 use App\Http\Controllers\Diarista\VerificaDisponibilidade;
 use App\Http\Controllers\Diaria\CadastroController as DiariaCadastroController;
-
 
 Route::get('/', IndexController::class);
 
@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     Route::patch('/diarias/{diaria}/presenca', ConfirmaPresenca::class)->name('diarias.confirmar');
     Route::patch('/diarias/{diaria}/avaliacoes', AvaliaDiaria::class)->name('diarias.avaliar');
+    Route::patch('/diarias/{diaria}/cancelado', CancelaDiaria::class)->name('diarias.cancelar');
 
 });
 
