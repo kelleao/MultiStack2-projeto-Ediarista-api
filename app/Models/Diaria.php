@@ -204,4 +204,17 @@ class Diaria extends Model
         return $this->pagamentos()->where('status', 'pago')->first();
     }
 
+    /**
+     * Retorna a lista de diarias como pagamento do(a) diarista
+     *
+     * @param User $diarista
+     * @return Collection
+     */
+    static public function pagamentoDiarista(User $diarista): Collection
+    {
+        return self::where('diarista_id', $diarista->id)
+                ->whereIn('status', [4, 6, 7])
+                ->get();
+    }
+
 }
