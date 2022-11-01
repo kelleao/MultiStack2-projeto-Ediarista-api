@@ -15,6 +15,8 @@ class Usuario extends HateoasBase implements HateoasInterface
     public function links(?Model $usuario): array
     {
         $this->adicionaLink('GET', 'lista_diarias', 'diarias.index');
+        $this->adicionaLink('PUT', 'editar_usuario', 'usuarios.update');
+        $this->adicionaLink('POST', 'alterar_foto_usuario', 'usuarios.definir-foto');
 
         $this->linksDoCliente($usuario);
         $this->linksDoDiarista($usuario);
@@ -45,9 +47,12 @@ class Usuario extends HateoasBase implements HateoasInterface
     {
         if($usuario->tipo_usuario === 2){
             $this->adicionaLink('PUT', 'cadastrar_endereco', 'usuarios.definir-endereco');
+            $this->adicionaLink('PUT', 'editar_endereco', 'usuarios.definir-endereco');
+            $this->adicionaLink('GET', 'listar_endereco', 'usuarios.obter-endereco');
             $this->adicionaLink('PUT', 'relacionar_cidades', 'usuarios.definir-cidades');
             $this->adicionaLink('GET', 'lista_oportunidades', 'oportunidades.index');
             $this->adicionaLink('GET', 'lista_pagamentos', 'pagamentos.index');
+            $this->adicionaLink('GET', 'cidades_atendidas', 'usuarios.obter-cidades');
         }
     }
 }

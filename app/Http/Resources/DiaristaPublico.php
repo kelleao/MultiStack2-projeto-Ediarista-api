@@ -17,7 +17,7 @@ class DiaristaPublico extends JsonResource
         return [
             'nome_completo' => $this->nome_completo,
             'reputacao' => $this->reputacao,
-            'foto_usuario' => $this->foto_usuario,
+            'foto_usuario' => foto_perfil($this->foto_usuario),
             'cidade' => 'São Paulo'
         ];
     }

@@ -2,26 +2,29 @@
 
 namespace App\Http\Controllers\Usuario;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\Usuario;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Actions\Usuario\CriarUsuario;
-use App\Http\Requests\UsuarioCadastroRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Actions\Usuario\CriarUsuario;
+use App\Actions\Usuario\AtualizarUsuario;
+use App\Http\Requests\UsuarioCadastroRequest;
+use App\Http\Requests\UsuarioAlteracaoRequest;
 
 class CadastroController extends Controller
 {
     public function __construct(
-        private CriarUsuario $criarUsuario
+        private CriarUsuario $criarUsuario,
+        private AtualizarUsuario $atualizarUsuario
     ){}
 
     /**
-     * Store a newly created resource in storage.
+     * Cria um usuário no sistema
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param UsuarioCadastroRequest $request
+     * @return Usuario
      */
-    public function store(UsuarioCadastroRequest $request)
+    public function store(UsuarioCadastroRequest $request): Usuario
     {
         $usuario = $this->criarUsuario->executar(
             $request->except('password_confirmation'),
@@ -36,17 +39,17 @@ class CadastroController extends Controller
         return new Usuario($usuario, $token);
     }
 
-
     /**
-     * Update the specified resource in storage.
+     * Atualiza os dados do usuário
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param UsuarioAlteracaoRequest $request
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UsuarioAlteracaoRequest $request): JsonResponse
     {
-        //
+        $this->atualizarUsuario->executar($request->except('password_confirmation'));
+
+        return resposta_padrao('Usuário Atualizado com sucesso', 'success', 200);
     }
 
 }

@@ -7,11 +7,14 @@ use App\Http\Controllers\Diaria\AvaliaDiaria;
 use App\Http\Controllers\Diaria\CancelaDiaria;
 use App\Http\Controllers\Diaria\Oportunidades;
 use App\Http\Controllers\Servico\ObtemServicos;
+use App\Http\Controllers\Diarista\ObtemEndereco;
 use App\Http\Controllers\Diaria\ConfirmaPresenca;
 use App\Http\Controllers\Diarista\DefineEndereco;
+use App\Http\Controllers\Usuario\DefineFotoPerfil;
 use App\Http\Controllers\Diaria\CandidataDiarista;
 use App\Http\Controllers\Usuario\CadastroController;
 use App\Http\Controllers\Endereco\BuscaCepApiExterna;
+use App\Http\Controllers\Diarista\ObtemCidadeAtendidas;
 use App\Http\Controllers\Diarista\ObtemDiaristasPorCEP;
 use App\Http\Controllers\Usuario\AutenticacaoController;
 use App\Http\Controllers\Diarista\DefineCidadesAtendidas;
@@ -28,8 +31,14 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('/diarias', [DiariaCadastroController::class, 'store'])->name('diarias.store');
     Route::get('/diarias/{diaria}', [DiariaCadastroController::class, 'show'])->name('diarias.show');
 
+    Route::put('/usuarios', [CadastroController::class, 'update'])->name('usuarios.update');
+    Route::post('/usuarios/fotos', DefineFotoPerfil::class)->name('usuarios.definir-foto');
+
+
     Route::put('/usuarios/endereco', DefineEndereco::class)->name('usuarios.definir-endereco');
+    Route::get('/usuarios/endereco', ObtemEndereco::class)->name('usuarios.obter-endereco');
     Route::put('/usuarios/cidades-atendidas', DefineCidadesAtendidas::class)->name('usuarios.definir-cidades');
+    Route::get('/usuarios/cidades-atendidas', ObtemCidadeAtendidas::class)->name('usuarios.obter-cidades');
 
     Route::post('/diarias/{diaria}/pagamento', PagaDiaria::class)->name('diarias.pagar');
 
