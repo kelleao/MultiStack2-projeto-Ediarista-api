@@ -57,7 +57,13 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'asset_url' => env('ASSET_URL'),
+    /**
+     * Define a URL da aplicação de front-end para ser usada na redefinição de senha
+     */
+    'client_web_url' => env('CLIENT_WEB_URL', 'http://localhost'),
+
+
+    'asset_url' => env('ASSET_URL', null),
 
     /*
     |--------------------------------------------------------------------------
