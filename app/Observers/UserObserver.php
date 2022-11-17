@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Mail\UsuarioCadastrado;
 use App\Models\User;
+use App\Mail\UsuarioCadastrado;
 use Illuminate\Support\Facades\Mail;
 
 class UserObserver
