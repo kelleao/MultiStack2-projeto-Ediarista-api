@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Endereco;
 
 use App\Http\Requests\CepRequest;
 use App\Http\Controllers\Controller;
-use App\Services\ConsultaCEP\ConsultaCEPInterface;
 use Illuminate\Validation\ValidationException;
+use App\Services\ConsultaCEP\ConsultaCEPInterface;
 
 class BuscaCepApiExterna extends Controller
 {

@@ -15,7 +15,7 @@ Route::get('/diaristas/localidades', ObtemDiaristasPorCEP::class)->name('diarist
 Route::get('/diaristas/disponibilidade', VerificaDisponibilidade::class)->name('enderecos.disponibilidade');
 Route::get('/enderecos', BuscaCepApiExterna::class)->name('enderecos.cep');
 
-Route::get('/servico', ObtemServicos::class)->name('servicos.index');
+Route::get('/servicos', ObtemServicos::class)->name('servicos.index');
 
 Route::post('/usuarios', [CadastroController::class, 'store'])->name('usuarios.create');
 

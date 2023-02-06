@@ -23,8 +23,10 @@ class CancelarAutomaticamente
 
         foreach ($diarias as $diaria) {
 
+            //estornar o pagamento do cliente
             $this->estornarPagamentoCliente->executar($diaria);
-
+            
+            //cancelar a diária
             $diaria->cancelar();
         }
     }

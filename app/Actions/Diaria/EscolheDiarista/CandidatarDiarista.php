@@ -11,13 +11,14 @@ use App\Checkers\Diaria\ValidaStatusDiaria;
 use App\Tasks\Diarista\SelecionaDiaristaIndice;
 use Illuminate\Validation\ValidationException;
 
-class CandidatarDiarista{
+class CandidatarDiarista
+{
 
     public function __construct(
         private ValidaStatusDiaria $validaStatusDiaria,
         private SelecionaDiaristaIndice $selecionaDiarista
-    )
-    {}
+    ) {
+    }
 
     /**
      * Difine um candidato(a) para diárias com criação menor que 24 horas
@@ -35,13 +36,12 @@ class CandidatarDiarista{
 
         $diaristaId = Auth::user()->id;
 
-        if($this->criadaAMenosDe24Horas($diaria)){
+        if ($this->criadaAMenosDe24Horas($diaria)) {
             $this->verificaDuplicidadeDeCandidato($diaria);
 
             $diaria->defineCandidato($diaristaId);
 
             return $this->selecionarDiaristaInstantaneamente($diaria);
-
         }
 
         return $diaria->confirmar($diaristaId);
@@ -56,11 +56,10 @@ class CandidatarDiarista{
     {
         $quantidadeEndereco = Auth::user()->enderecoDiarista()->count();
 
-        if($quantidadeEndereco === 0){
+        if ($quantidadeEndereco === 0) {
             throw ValidationException::withMessages([
                 'endereco_diarista' => 'O diarista deve ter o endereço cadastrado'
             ]);
-
         }
     }
 
@@ -75,7 +74,7 @@ class CandidatarDiarista{
         $diaristaCandidato = $diaria->candidatas()
             ->where('diarista_id', Auth::user()->id)
             ->first();
-        if($diaristaCandidato){
+        if ($diaristaCandidato) {
             throw ValidationException::withMessages([
                 'data_criacao' => 'O/A diarista já é candidato(a) dessa diária'
             ]);
@@ -93,7 +92,6 @@ class CandidatarDiarista{
         $dataCriacaoDiaria = new Carbon($diaria->created_at);
         $quantidadeDehorasDesdeACriacao = $dataCriacaoDiaria->diffInHours(Carbon::now(), false);
         return $quantidadeDehorasDesdeACriacao < 24;
-
     }
 
     /**
@@ -106,7 +104,7 @@ class CandidatarDiarista{
     {
         $quantidadeCandidatas = $diaria->candidatas()->count();
 
-        if($quantidadeCandidatas === 3){
+        if ($quantidadeCandidatas === 3) {
             return $diaria->confirmar(
                 $this->selecionaDiarista->executar($diaria)
             );

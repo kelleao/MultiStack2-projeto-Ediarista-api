@@ -3,9 +3,9 @@
 namespace App\Http\Resources;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Hateoas\Diaria as HateoasDiaria;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class Diaria extends JsonResource
 {

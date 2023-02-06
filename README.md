@@ -79,3 +79,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 # Acesso a listagem de transações
 
 o link de acesso dela é: https://transacoes-pagarme-multistack.herokuapp.com/
+
+# link simbolico para a pasta de imagem 
+
+mklink /D public ..\storage\app\public

@@ -34,7 +34,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::put('/usuarios/cidades-atendidas', DefineCidadesAtendidas::class)->name('usuarios.definir-cidades');
     Route::get('/usuarios/cidades-atendidas', ObtemCidadeAtendidas::class)->name('usuarios.obter-cidades');
 
-    Route::post('/diarias/{diaria}/pagamento', PagaDiaria::class)->name('diarias.pagar');
+    Route::post('/diarias/{diaria}/pagamentos', PagaDiaria::class)->name('diarias.pagar');
 
     Route::post('/diarias/{diaria}/candidatas', CandidataDiarista::class)->name('diarias.candidatar');
     Route::get('/oportunidades', Oportunidades::class)->name('oportunidades.index');

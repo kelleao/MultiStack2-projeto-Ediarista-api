@@ -26,7 +26,7 @@ class EstornarPagamentoCliente
         $valor = $this->valor($diaria, $estornoCompleto);
 
         $pagamento = $diaria->pagamentoValido();
-
+       
         $transacao = $this->realizaEstornoGateway($pagamento->transacao_id, $valor);
 
         $this->guardaTransacaoBancoDeDados($diaria, $pagamento->transacao_id, $valor);
@@ -50,6 +50,7 @@ class EstornarPagamentoCliente
                 'id' => $transacaoId,
                 'amount' => $valorEstorno
         ]);
+            
         } catch (\Throwable $exception) {
             throw ValidationException::withMessages([
                 'pagamento' => $exception->getMessage()

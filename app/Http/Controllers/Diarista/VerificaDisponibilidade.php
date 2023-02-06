@@ -14,7 +14,7 @@ class VerificaDisponibilidade extends Controller
     ){}
 
     /**
-     * Retorna a disponibilidade de diaristas para um CEp
+     * Retorna a disponibilidade de diaristas para um CEP
      *
      * @param CepRequest $request
      * @return JsonResponse
