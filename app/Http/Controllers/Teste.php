@@ -16,7 +16,7 @@ use TeamPickr\DistanceMatrix\Frameworks\Laravel\DistanceMatrix;
 //      */
 //     public function __invoke(Request $request)
 //     {
-//         $license = new StandardLicense('AIzaSyAyWuhTx5KTS-YcgiiDjzsD7cb7-s13q2w');
+//         $license = new StandardLicense('');
 
 //         $response = DistanceMatrix::license($license)
 //             ->addOrigin('09715-340')
